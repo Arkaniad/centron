@@ -1,4 +1,4 @@
-centron-engine
-==============
+centron
+=======
 
-A simple engine for a simple game that I'm simply making!
+A simple game for a school project!
