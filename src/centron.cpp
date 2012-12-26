@@ -1,6 +1,6 @@
 #include "centron.h"
 
-Centron::centron() {
+int Centron::centron() {
   Surf_Display = NULL;
   Running = true;
 }

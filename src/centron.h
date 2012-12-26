@@ -9,7 +9,7 @@ class Centron {
     SDL_Surface* Surf_Display;
 
   public:
-    centron();
+    int centron();
     int OnExecute();
 
   public:
