@@ -1,2 +1,2 @@
 add_executable(centron centron.cpp)
-add_library(centron SDL)
+target_link_libraries(centron SDL)
