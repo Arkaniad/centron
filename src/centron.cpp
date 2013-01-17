@@ -7,6 +7,10 @@
 #include <string>
 #include <iostream>
 
+#define DEBUG
+
+const std::string version_str = "Centron Engine 0.0.1a";
+
 //Use the namespace
 using namespace Centron;
 
@@ -16,13 +20,10 @@ const int SCREEN_HEIGHT = 480;
 const int SCREEN_BPP    = 32;
 
 SDL_Surface *sprite  = NULL;
-SDL_Rect clip[4];
-//Set the clip box
-
 
 SDL_Surface *background = NULL;
 SDL_Surface *screen = NULL;
-
+SDL_Surface *text = NULL;
 SDL_Event event;
 
 Logger log;
@@ -56,7 +57,7 @@ void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* dest, SDL_Rec
 }
 bool init(){
   log = Logger(tag);
-  log.info("Initializing Engine");
+  log.info("Initializing Engine "+version_str);
   //Initialize all SDL subsystems
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1){
     log.info("Failed to init SDL.");
@@ -70,32 +71,15 @@ bool init(){
     return false;
   }
   
-  SDL_WM_SetCaption("Centron", NULL);
+  if(TTF_Init() == -1){
+    return false;
+  }
+  SDL_WM_SetCaption(version_str.c_str(), NULL);
   return true;
 }
 bool load_files(){
   log.info("Loading content");
-  sprite = load_image("smileanim.bmp");
-  clip[0].x = 0;
-  clip[0].y = 0;
-  clip[0].w = 128;
-  clip[0].h = 128;
-  
-  clip[1].x = 128;
-  clip[1].y = 0;
-  clip[1].w = 128;
-  clip[1].h = 128;
-  
-  clip[2].x = 0;
-  clip[2].y = 128;
-  clip[2].w = 128;
-  clip[2].h = 128;
-  
-  clip[3].x = 128;
-  clip[3].y = 128;
-  clip[3].w = 128;
-  clip[3].h = 128;
-  
+  sprite = load_image("smile.bmp");
   background = load_image("background.bmp");
   if(sprite == NULL){
     return false;
@@ -105,6 +89,8 @@ bool load_files(){
 void clean_up(){
   log.info("Cleaning up");
   SDL_FreeSurface(sprite);
+  SDL_FreeSurface(background);
+  SDL_FreeSurface(text);
   SDL_Quit();
 }
 
@@ -119,8 +105,7 @@ int main(int argc, const char* args[]){
   
   
   apply_surface(0,0,background,screen);
-  apply_surface(64,324,sprite,screen,&clip[0]);
-  apply_surface(256,324,sprite,screen,&clip[1]);
+  apply_surface(64,324,sprite,screen);
   if(SDL_Flip(screen)==-1){
     return 1;
   }
