@@ -16,6 +16,7 @@ const int SCREEN_HEIGHT = 480;
 const int SCREEN_BPP    = 32;
 
 SDL_Surface *image  = NULL;
+SDL_Surface *background = NULL;
 SDL_Surface *screen = NULL;
 
 SDL_Event event;
@@ -70,7 +71,8 @@ bool init(){
 }
 bool load_files(){
   log.info("Loading content");
-  image = load_image("x.png");
+  image = load_image("smile.bmp");
+  background = load_image("background.bmp");
   if(image == NULL){
     return false;
   }
@@ -90,7 +92,8 @@ int main(int argc, const char* args[]){
   if(load_files() == false){
     return 1;
   }  
-  apply_surface(0,0,image,screen);
+  apply_surface(0,0,background,screen);
+  apply_surface(64,324,image,screen);
   if(SDL_Flip(screen)==-1){
     return 1;
   }
