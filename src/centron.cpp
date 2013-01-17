@@ -3,8 +3,12 @@
 #include "SDL/SDL_ttf.h"
 #include "SDL/SDL_mixer.h"
 #include "SDL/SDL_image.h"
+#include "lib/logger.h"
 #include <string>
 #include <iostream>
+
+//Use the namespace
+using namespace Centron;
 
 //Screen attributes
 const int SCREEN_WIDTH  = 640;
@@ -16,42 +20,48 @@ SDL_Surface *screen = NULL;
 
 SDL_Event event;
 
-std::string tag = "[Centron] ";
+Logger log;
 
-void log(std::string message){
-  std::cout << tag << message << std::endl;
-}
+std::string tag = "ENGINE";
+
+
 SDL_Surface *load_image(std::string filename){
-  log("Loading image "+filename);
+  log.info("Loading image "+filename);
   SDL_Surface* loadedImage    = NULL;
   SDL_Surface* optimizedImage = NULL;
   loadedImage = IMG_Load(filename.c_str());
   if(loadedImage != NULL){
-    log("Successfully loaded "+filename);
+    log.info("Successfully loaded "+filename);
     optimizedImage = SDL_DisplayFormat(loadedImage);
     SDL_FreeSurface(loadedImage);
+  }
+  if(optimizedImage != NULL){
+    Uint32 colorkey = SDL_MapRGB(optimizedImage->format, 0, 0xFF, 0xFF);
+    SDL_SetColorKey(optimizedImage, SDL_SRCCOLORKEY, colorkey);
+    return optimizedImage;
   }
   return optimizedImage;
 }
 void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* dest){
-    log("Blitting surface");
+    log.info("Blitting surface");
     SDL_Rect offset;
     offset.x = x;
     offset.y = y;
     SDL_BlitSurface(source, NULL, dest, &offset);
 }
 bool init(){
-  log("Initializing Engine");
+  log = Logger(tag);
+  log.info("Initializing Engine");
   //Initialize all SDL subsystems
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1){
-    log("Failed to init SDL.");
+    log.info("Failed to init SDL.");
     return false;
   }
   
   //Set up screen
   screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
   if(screen == NULL){
-    log("Failed to init screen.");
+    log.info("Failed to init screen.");
     return false;
   }
   
@@ -59,7 +69,7 @@ bool init(){
   return true;
 }
 bool load_files(){
-  log("Loading content");
+  log.info("Loading content");
   image = load_image("x.png");
   if(image == NULL){
     return false;
@@ -67,7 +77,7 @@ bool load_files(){
   return true;
 }
 void clean_up(){
-  log("Cleaning up");
+  log.info("Cleaning up");
   SDL_FreeSurface(image);
   SDL_Quit();
 }
