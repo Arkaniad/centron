@@ -94,6 +94,8 @@ void clean_up(){
   SDL_FreeSurface(sprite);
   SDL_FreeSurface(background);
   SDL_FreeSurface(message);
+  TTF_CloseFont(font);
+  TTF_Quit();
   SDL_Quit();
 }
 
