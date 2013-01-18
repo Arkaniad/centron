@@ -23,10 +23,13 @@ SDL_Surface *sprite  = NULL;
 
 SDL_Surface *background = NULL;
 SDL_Surface *screen = NULL;
-SDL_Surface *text = NULL;
+SDL_Surface *message = NULL;
 SDL_Event event;
 
 Logger log;
+
+TTF_Font *font = NULL;
+SDL_Color text_color = { 255, 255, 255};
 
 std::string tag = "ENGINE";
 
@@ -79,9 +82,9 @@ bool init(){
 }
 bool load_files(){
   log.info("Loading content");
-  sprite = load_image("smile.bmp");
   background = load_image("background.bmp");
-  if(sprite == NULL){
+  font = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf", 28);
+  if(font == NULL){
     return false;
   }
   return true;
@@ -90,7 +93,7 @@ void clean_up(){
   log.info("Cleaning up");
   SDL_FreeSurface(sprite);
   SDL_FreeSurface(background);
-  SDL_FreeSurface(text);
+  SDL_FreeSurface(message);
   SDL_Quit();
 }
 
@@ -103,9 +106,10 @@ int main(int argc, const char* args[]){
     return 1;
   }  
   
+  message = TTF_RenderText_Solid(font, version_str.c_str(), text_color);
   
   apply_surface(0,0,background,screen);
-  apply_surface(64,324,sprite,screen);
+  apply_surface(10,10,message,screen);
   if(SDL_Flip(screen)==-1){
     return 1;
   }
