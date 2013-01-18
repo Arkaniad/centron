@@ -24,6 +24,14 @@ SDL_Surface *sprite  = NULL;
 SDL_Surface *background = NULL;
 SDL_Surface *screen = NULL;
 SDL_Surface *message = NULL;
+
+SDL_Surface *message_dn = NULL;
+SDL_Surface *message_rt = NULL;
+SDL_Surface *message_lt = NULL;
+SDL_Surface *message_up = NULL;
+
+SDL_Surface *message_keyboard = NULL;
+
 SDL_Event event;
 
 Logger log;
@@ -52,7 +60,6 @@ SDL_Surface *load_image(std::string filename){
   return optimizedImage;
 }
 void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* dest, SDL_Rect* clip = NULL){
-    log.info("Blitting surface");
     SDL_Rect offset;
     offset.x = x;
     offset.y = y;
@@ -86,6 +93,12 @@ bool load_files(){
   font = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf", 28);
   if(font == NULL){
     return false;
+  } else {
+    message = TTF_RenderText_Solid(font, version_str.c_str(), text_color);
+    message_up = TTF_RenderText_Solid(font, "Key: UP", text_color);
+    message_dn = TTF_RenderText_Solid(font, "Key: DN", text_color);
+    message_lt = TTF_RenderText_Solid(font, "Key: LT", text_color);
+    message_rt = TTF_RenderText_Solid(font, "Key: RT", text_color);
   }
   return true;
 }
@@ -108,8 +121,7 @@ int main(int argc, const char* args[]){
     return 1;
   }  
   
-  message = TTF_RenderText_Solid(font, version_str.c_str(), text_color);
-  
+
   apply_surface(0,0,background,screen);
   apply_surface(10,10,message,screen);
   if(SDL_Flip(screen)==-1){
@@ -118,6 +130,33 @@ int main(int argc, const char* args[]){
   
   while(quit ==false){
     while(SDL_PollEvent(&event)){
+      if(event.type == SDL_KEYDOWN){
+        switch(event.key.keysym.sym){
+          case SDLK_UP: message_keyboard = message_up;
+            log.info("Key: UP");
+            break;
+          case SDLK_DOWN: message_keyboard = message_dn;
+            log.info("Key: DN");
+            break;
+          case SDLK_LEFT: message_keyboard = message_lt;
+            log.info("Key: LT");
+            break;
+          case SDLK_RIGHT: message_keyboard = message_rt;
+            log.info("Key: RT");
+            break;
+          default:
+            break;
+        }
+        if(message_keyboard != NULL){
+          apply_surface(0,0,background,screen);
+          apply_surface(10,10,message,screen);
+          apply_surface((SCREEN_WIDTH - message_keyboard->w) / 2, (SCREEN_HEIGHT - message_keyboard->h)/2, message_keyboard, screen);
+          message_keyboard = NULL;
+        }
+        if(SDL_Flip(screen)==-1){
+          return 1;
+        }
+      }
       if(event.type == SDL_QUIT){
         quit = true;
       }
