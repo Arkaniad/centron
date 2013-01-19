@@ -25,5 +25,5 @@ namespace Centron {
       */
       void apply_image(int x, int y, SDL_Surface* source, SDL_Surface* dest, SDL_Rect* clip = NULL);
   };
-};
+}
 #endif // GRAPHICS_H

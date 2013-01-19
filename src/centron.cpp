@@ -4,6 +4,7 @@
 #include "SDL/SDL_mixer.h"
 #include "SDL/SDL_image.h"
 #include "lib/logger.h"
+#include "lib/graphics.h"
 #include <string>
 #include <iostream>
 
@@ -35,36 +36,16 @@ SDL_Surface *message_keyboard = NULL;
 SDL_Event event;
 
 Logger log;
+Graphics gfx;
 
 TTF_Font *font = NULL;
 SDL_Color text_color = { 255, 255, 255};
 
+
+
 std::string tag = "ENGINE";
 
-
-SDL_Surface *load_image(std::string filename){
-  log.info("Loading image "+filename);
-  SDL_Surface* loadedImage    = NULL;
-  SDL_Surface* optimizedImage = NULL;
-  loadedImage = IMG_Load(filename.c_str());
-  if(loadedImage != NULL){
-    log.info("Successfully loaded "+filename);
-    optimizedImage = SDL_DisplayFormat(loadedImage);
-    SDL_FreeSurface(loadedImage);
-  }
-  if(optimizedImage != NULL){
-    Uint32 colorkey = SDL_MapRGB(optimizedImage->format, 0, 0xFF, 0xFF);
-    SDL_SetColorKey(optimizedImage, SDL_SRCCOLORKEY, colorkey);
-    return optimizedImage;
-  }
-  return optimizedImage;
-}
-void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* dest, SDL_Rect* clip = NULL){
-    SDL_Rect offset;
-    offset.x = x;
-    offset.y = y;
-    SDL_BlitSurface(source, clip, dest, &offset);
-}
+//Engine Functions
 bool init(){
   log = Logger(tag);
   log.info("Initializing Engine "+version_str);
@@ -89,7 +70,7 @@ bool init(){
 }
 bool load_files(){
   log.info("Loading content");
-  background = load_image("background.bmp");
+  background = gfx.load_image("background.bmp");
   font = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf", 28);
   if(font == NULL){
     return false;
@@ -112,8 +93,47 @@ void clean_up(){
   SDL_Quit();
 }
 
-int main(int argc, const char* args[]){
+//Game loop
+bool loop(){
   bool quit = false;
+  while(quit == false){
+    while(SDL_PollEvent(&event)){
+      if(event.type == SDL_KEYDOWN){
+        switch(event.key.keysym.sym){
+          case SDLK_UP: message_keyboard = message_up;
+          log.info("Key: UP");
+          break;
+          case SDLK_DOWN: message_keyboard = message_dn;
+                   log.info("Key: DN");
+          break;
+          case SDLK_LEFT: message_keyboard = message_lt;
+          log.info("Key: LT");
+          break;
+          case SDLK_RIGHT: message_keyboard = message_rt;
+                   log.info("Key: RT");
+          break;
+          default:
+            break;
+        }
+        if(message_keyboard != NULL){
+          gfx.apply_image(0,0,background,screen);
+          gfx.apply_image(10,10,message,screen);
+          gfx.apply_image((SCREEN_WIDTH - message_keyboard->w) / 2, (SCREEN_HEIGHT - message_keyboard->h)/2, message_keyboard, screen);
+          message_keyboard = NULL;
+        }
+        if(SDL_Flip(screen)==-1){
+          return false;
+        }
+      }
+      if(event.type == SDL_QUIT){
+        quit = true;
+      }
+    }
+  } return true;
+}
+
+//Main code
+int main(int argc, const char* args[]){
   if(!init()){
     return 1;
   }
@@ -122,46 +142,16 @@ int main(int argc, const char* args[]){
   }  
   
 
-  apply_surface(0,0,background,screen);
-  apply_surface(10,10,message,screen);
+  gfx.apply_image(0,0,background,screen);
+  gfx.apply_image(10,10,message,screen);
   if(SDL_Flip(screen)==-1){
     return 1;
   }
-  
-  while(quit ==false){
-    while(SDL_PollEvent(&event)){
-      if(event.type == SDL_KEYDOWN){
-        switch(event.key.keysym.sym){
-          case SDLK_UP: message_keyboard = message_up;
-            log.info("Key: UP");
-            break;
-          case SDLK_DOWN: message_keyboard = message_dn;
-            log.info("Key: DN");
-            break;
-          case SDLK_LEFT: message_keyboard = message_lt;
-            log.info("Key: LT");
-            break;
-          case SDLK_RIGHT: message_keyboard = message_rt;
-            log.info("Key: RT");
-            break;
-          default:
-            break;
-        }
-        if(message_keyboard != NULL){
-          apply_surface(0,0,background,screen);
-          apply_surface(10,10,message,screen);
-          apply_surface((SCREEN_WIDTH - message_keyboard->w) / 2, (SCREEN_HEIGHT - message_keyboard->h)/2, message_keyboard, screen);
-          message_keyboard = NULL;
-        }
-        if(SDL_Flip(screen)==-1){
-          return 1;
-        }
-      }
-      if(event.type == SDL_QUIT){
-        quit = true;
-      }
-    }
+  if(loop() == false){
+    return 1;
   }
+  
+  
   clean_up();
   return 0;
 }

@@ -5,8 +5,7 @@
 
 namespace Centron {
 
-class Logger
-{
+class Logger {
   std::string tag;
   public:
     Logger();
@@ -23,7 +22,6 @@ class Logger
     
     void setTag(std::string newTag);
   };
-    
 }
 
 #endif // CENTRON_LOGGER_H

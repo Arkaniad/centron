@@ -10,7 +10,7 @@ Graphics::Graphics(){
   log = Logger("GRAPHICS");
 }
 
-SDL_Surface *load_image(std::string filename) {
+SDL_Surface *Graphics::load_image(std::string filename) {
   log.info("Loading image "+filename);
   SDL_Surface* loadedImage    = NULL;
   SDL_Surface* optimizedImage = NULL;
@@ -28,7 +28,7 @@ SDL_Surface *load_image(std::string filename) {
   return optimizedImage;
 }
 
-void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* dest, SDL_Rect* clip = NULL) {
+void Graphics::apply_image(int x, int y, SDL_Surface* source, SDL_Surface* dest, SDL_Rect* clip) {
   SDL_Rect offset;
   offset.x = x;
   offset.y = y;
