@@ -129,7 +129,9 @@ bool loop(){
             break;
         }
         if(message_keyboard != NULL){
+          button->show();
           if(button->isVisible()){
+            log.info("Drawing button!");
             gfx.apply_image(button->getX(), button->getY(),button->getSurface(),screen, button->getClips());
           }
           gfx.apply_image(0,0,background,screen);
