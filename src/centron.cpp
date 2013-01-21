@@ -5,6 +5,7 @@
 #include "SDL/SDL_image.h"
 #include "lib/logger.h"
 #include "lib/graphics.h"
+#include "lib/gui/button.h"
 #include <string>
 #include <iostream>
 
@@ -25,6 +26,7 @@ SDL_Surface *sprite  = NULL;
 SDL_Surface *background = NULL;
 SDL_Surface *screen = NULL;
 SDL_Surface *message = NULL;
+SDL_Surface *button_sheet = NULL;
 
 SDL_Surface *message_dn = NULL;
 SDL_Surface *message_rt = NULL;
@@ -41,6 +43,7 @@ Graphics gfx;
 TTF_Font *font = NULL;
 SDL_Color text_color = { 255, 255, 255};
 
+GUI::Button *button = NULL;
 
 
 std::string tag = "ENGINE";
@@ -71,6 +74,7 @@ bool init(){
 bool load_files(){
   log.info("Loading content");
   background = gfx.load_image("background.bmp");
+  button_sheet = gfx.load_image("button.png");
   font = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf", 28);
   if(font == NULL){
     return false;
@@ -81,6 +85,7 @@ bool load_files(){
     message_lt = TTF_RenderText_Solid(font, "Key: LT", text_color);
     message_rt = TTF_RenderText_Solid(font, "Key: RT", text_color);
   }
+  *button = GUI::Button(button_sheet, 50, 50, 200, 40, true);
   return true;
 }
 void clean_up(){
@@ -135,18 +140,25 @@ bool loop(){
 //Main code
 int main(int argc, const char* args[]){
   if(!init()){
+    log.err("Couldn't init.");
     return 1;
   }
   if(load_files() == false){
+    log.err("Didn't load files.");
     return 1;
   }  
   
-
+  log.info("Setting up the engine view.");
   gfx.apply_image(0,0,background,screen);
   gfx.apply_image(10,10,message,screen);
+  
+  log.info("Flipping screen.");
   if(SDL_Flip(screen)==-1){
+    log.err("Could not flip screen.");
     return 1;
   }
+  
+  log.info("Entering main loop.");
   if(loop() == false){
     return 1;
   }
