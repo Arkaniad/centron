@@ -4,7 +4,7 @@
 namespace Centron{
   namespace GUI{
     enum ButtonStates{
-      CLIP_MOUSEOVER, CLIP_MOUSEDOWN, CLIP_MOUSEUP, CLIP_MOUSEOUT
+      CLIP_MOUSEOVER = 0, CLIP_MOUSEDOWN = 1, CLIP_MOUSEUP = 2, CLIP_MOUSEOUT = 3
     };
   }
 }

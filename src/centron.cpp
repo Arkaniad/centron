@@ -73,19 +73,26 @@ bool init(){
 }
 bool load_files(){
   log.info("Loading content");
+  
+  log.info("Loading images.");
   background = gfx.load_image("background.bmp");
   button_sheet = gfx.load_image("button.png");
+  
+  log.info("Loading fonts.");
   font = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf", 28);
   if(font == NULL){
+    log.err("Couldn't load fonts.");
     return false;
   } else {
+    log.info("Loading messages.");
     message = TTF_RenderText_Solid(font, version_str.c_str(), text_color);
     message_up = TTF_RenderText_Solid(font, "Key: UP", text_color);
     message_dn = TTF_RenderText_Solid(font, "Key: DN", text_color);
     message_lt = TTF_RenderText_Solid(font, "Key: LT", text_color);
     message_rt = TTF_RenderText_Solid(font, "Key: RT", text_color);
   }
-  *button = GUI::Button(button_sheet, 50, 50, 200, 40, true);
+  GUI::Button tmp_button = GUI::Button(button_sheet, 50, 50, 200, 40, true);
+  button = &tmp_button;
   return true;
 }
 void clean_up(){
@@ -100,6 +107,7 @@ void clean_up(){
 
 //Game loop
 bool loop(){
+  log.info("In main loop.");
   bool quit = false;
   while(quit == false){
     while(SDL_PollEvent(&event)){
@@ -121,16 +129,21 @@ bool loop(){
             break;
         }
         if(message_keyboard != NULL){
+          if(button->isVisible()){
+            gfx.apply_image(button->getX(), button->getY(),button->getSurface(),screen, button->getClips());
+          }
           gfx.apply_image(0,0,background,screen);
           gfx.apply_image(10,10,message,screen);
           gfx.apply_image((SCREEN_WIDTH - message_keyboard->w) / 2, (SCREEN_HEIGHT - message_keyboard->h)/2, message_keyboard, screen);
           message_keyboard = NULL;
         }
         if(SDL_Flip(screen)==-1){
+          log.err("Couldn't flip screen (In main loop.)");
           return false;
         }
       }
       if(event.type == SDL_QUIT){
+        log.info("Received quit event.");
         quit = true;
       }
     }
