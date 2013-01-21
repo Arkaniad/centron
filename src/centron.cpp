@@ -47,11 +47,15 @@ GUI::Button *button = NULL;
 
 
 std::string tag = "ENGINE";
+std::string path = "";
+std::string respath = "/res/";
 
 //Engine Functions
-bool init(){
+bool init(const int argc, const char *argv[]){
   log = Logger(tag);
   log.info("Initializing Engine "+version_str);
+  log.info(argv[0]);
+  path = argv[0];
   //Initialize all SDL subsystems
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1){
     log.info("Failed to init SDL.");
@@ -66,6 +70,7 @@ bool init(){
   }
   
   if(TTF_Init() == -1){
+    log.err("Could not init font.");
     return false;
   }
   SDL_WM_SetCaption(version_str.c_str(), NULL);
@@ -75,8 +80,8 @@ bool load_files(){
   log.info("Loading content");
   
   log.info("Loading images.");
-  background = gfx.load_image("background.bmp");
-  button_sheet = gfx.load_image("button.png");
+  background = gfx.load_image(path+respath+"background.bmp");
+  button_sheet = gfx.load_image(path+respath+"button.png");
   
   log.info("Loading fonts.");
   font = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf", 28);
@@ -153,8 +158,8 @@ bool loop(){
 }
 
 //Main code
-int main(int argc, const char* args[]){
-  if(!init()){
+int main(const int argc, const char *argv[]){
+  if(!init(argc, argv)){
     log.err("Couldn't init.");
     return 1;
   }
