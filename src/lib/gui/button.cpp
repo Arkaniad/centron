@@ -7,7 +7,7 @@ using namespace Centron::GUI;
 
 Button::Button(SDL_Surface *sheet, int x, int y, int w, int h, bool vis){
  log = Centron::Logger("BUTTN");
- image = sheet;
+ image = SDL_ConvertSurface(sheet, sheet->format, sheet->flags);
  box.x = x;
  box.y = y;
  box.w = w;
