@@ -16,9 +16,9 @@ SDL_Surface *Graphics::load_image(std::string filename) {
   SDL_Surface* optimizedImage = NULL;
   loadedImage = IMG_Load(filename.c_str());
   if(loadedImage != NULL){
-    log.info("Successfully loaded "+filename);
     optimizedImage = SDL_DisplayFormat(loadedImage);
     SDL_FreeSurface(loadedImage);
+    log.info("Successfully loaded "+filename);
   }
   if(optimizedImage != NULL){
     Uint32 colorkey = SDL_MapRGB(optimizedImage->format, 0, 0xFF, 0xFF);
