@@ -28,10 +28,10 @@ void Logger::warn(std::string suptag, std::string message){
   std::cout << "[" << suptag << " WARN] " << message << std::endl;
 }
 void Logger::err(std::string message){
-  std::cout << "[" << tag << "] ERROR" << message << std::endl;
+  std::cout << "[" << tag << " ERROR] " << message << std::endl;
 }
 void Logger::err(std::string suptag, std::string message){
-  std::cout << "[" << suptag << "] ERROR" << message << std::endl;
+  std::cout << "[" << suptag << " ERROR] " << message << std::endl;
 }
 void Logger::setTag(std::string newtag){
   tag = newtag;
