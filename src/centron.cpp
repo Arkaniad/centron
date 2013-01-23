@@ -6,6 +6,8 @@
 #include "lib/logger.h"
 #include "lib/graphics.h"
 #include "lib/gui/button.h"
+#include "lib/resources.h"
+
 #include <string>
 #include <iostream>
 
@@ -39,6 +41,7 @@ SDL_Event event;
 
 Logger log;
 Graphics gfx;
+Resources res;
 
 TTF_Font *font = NULL;
 SDL_Color text_color = { 255, 255, 255};
@@ -56,6 +59,9 @@ bool init(const int argc, const char *argv[]){
   log.info("Initializing Engine "+version_str);
   log.info(argv[0]);
   path = argv[0];
+  res = Resources();
+  res.setLaunchPath(argv[0]);
+  res.buildResPath();
   //Initialize all SDL subsystems
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1){
     log.info("Failed to init SDL.");
@@ -80,8 +86,8 @@ bool load_files(){
   log.info("Loading content");
   
   log.info("Loading images.");
-  background = gfx.load_image(path+respath+"background.bmp");
-  button_sheet = gfx.load_image(path+respath+"button.png");
+  background = gfx.load_image(res.getResPath()+"background.bmp");
+  button_sheet = gfx.load_image(res.getResPath()+"button.png");
   
   log.info("Loading fonts.");
   font = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf", 28);
@@ -98,6 +104,7 @@ bool load_files(){
   }
   GUI::Button tmp_button = GUI::Button(button_sheet, 50, 50, 200, 40, true);
   button = &tmp_button;
+  button->show();
   return true;
 }
 void clean_up(){
@@ -134,15 +141,14 @@ bool loop(){
             break;
         }
         if(message_keyboard != NULL){
-          button->show();
-          if(button->isVisible()){
-            log.info("Drawing button!");
-            gfx.apply_image(button->getX(), button->getY(),button->getSurface(),screen, button->getClips());
-          }
           gfx.apply_image(0,0,background,screen);
           gfx.apply_image(10,10,message,screen);
           gfx.apply_image((SCREEN_WIDTH - message_keyboard->w) / 2, (SCREEN_HEIGHT - message_keyboard->h)/2, message_keyboard, screen);
           message_keyboard = NULL;
+          if(button->isVisible()){
+            log.info("Drawing button!");
+            gfx.apply_image(button->getX(), button->getY(),button->getSurface(),screen, button->getClips());
+          }
         }
         if(SDL_Flip(screen)==-1){
           log.err("Couldn't flip screen (In main loop.)");
