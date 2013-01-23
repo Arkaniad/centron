@@ -5,13 +5,13 @@
 
 using namespace Centron::GUI;
 
-Button::Button(SDL_Surface *sheet, int x, int y, int w, int h, bool vis){
+Button::Button(SDL_Surface *sheet, int nx, int ny, int nw, int nh, bool vis){
  log = Centron::Logger("BUTTN");
  image = SDL_ConvertSurface(sheet, sheet->format, sheet->flags);
- box.x = x;
- box.y = y;
- box.w = w;
- box.h = h;
+ box.x = nx;
+ box.y = ny;
+ box.w = nw;
+ box.h = nh;
  
  visible = vis;
  

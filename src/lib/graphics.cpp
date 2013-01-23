@@ -32,6 +32,9 @@ void Graphics::apply_image(int x, int y, SDL_Surface* source, SDL_Surface* dest,
   SDL_Rect offset;
   offset.x = x;
   offset.y = y;
-  SDL_BlitSurface(source, clip, dest, &offset);
+  if(SDL_BlitSurface(source, clip, dest, &offset) == -1){
+    std::string err = SDL_GetError();
+    log.err("Failed to blit surface: "+err);
+  }
 }
 

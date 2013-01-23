@@ -145,10 +145,6 @@ bool loop(){
           gfx.apply_image(10,10,message,screen);
           gfx.apply_image((SCREEN_WIDTH - message_keyboard->w) / 2, (SCREEN_HEIGHT - message_keyboard->h)/2, message_keyboard, screen);
           message_keyboard = NULL;
-          if(button->isVisible()){
-            log.info("Drawing button!");
-            gfx.apply_image(button->getX(), button->getY(),button->getSurface(),screen, button->getClips());
-          }
         }
         if(SDL_Flip(screen)==-1){
           log.err("Couldn't flip screen (In main loop.)");
@@ -177,6 +173,10 @@ int main(const int argc, const char *argv[]){
   log.info("Setting up the engine view.");
   gfx.apply_image(0,0,background,screen);
   gfx.apply_image(10,10,message,screen);
+  if(button->isVisible()){
+    log.info("Drawing button!");
+    gfx.apply_image(button->getX(), button->getY(),button_sheet,screen);
+  }
   
   log.info("Flipping screen.");
   if(SDL_Flip(screen)==-1){

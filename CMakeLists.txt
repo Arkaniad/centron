@@ -10,7 +10,7 @@ configure_file (
 )
 include_directories("${PROJECT_BINARY_DIR}")
 find_package(SDL)
-set(CMAKE_CXX_FLAGS "-O2 -Wall")
+set(CMAKE_CXX_FLAGS "-O2 -Wall -ggdb")
 add_subdirectory(src)
 
 #file(INSTALL src/centron PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE DESTINATION bin/)
