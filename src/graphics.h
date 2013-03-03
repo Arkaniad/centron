@@ -7,6 +7,7 @@
 
 // Internal Includes
 #include "log.h"
+#include "util.h"
 
 namespace Centron {
   /**
@@ -14,6 +15,7 @@ namespace Centron {
    */
   class Graphics {
     Logger log;
+    Utility util;
   public:
     Graphics();
 
