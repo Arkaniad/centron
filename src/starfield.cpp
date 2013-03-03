@@ -13,16 +13,24 @@
 
 using namespace Centron;
 
-Starfield::Starfield(int width, int height, SDL_Surface *surface){
+Starfield::Starfield(int w, int h, SDL_Surface *surface){
   log.setTag("STRFLD");
   log.info("Initializing starfield");
-  srand(time(0));
 
   screen = surface;
 
   color = SDL_MapRGB(screen->format, 255, 255, 255);
   blank = SDL_MapRGB(screen->format, 0,   0,   0  );
 
+  screen_x = w;
+  screen_y = h;
+  
+  
+  log.info("Calculating screen width");
+  center_x = w / 2;
+  center_y = h / 2;
+  
+  
   log.info("Loading stars");
   for(int i = 0; i < star_count; i++){
     log.info("Loading star "+util.int2string(i));
@@ -38,12 +46,6 @@ Starfield::Starfield(int width, int height, SDL_Surface *surface){
              + util.int2string(star_z[i]));
   }
 
-  log.info("Calculating screen width");
-  center_x = width / 2;
-  center_y = height / 2;
-
-  screen_x = width;
-  screen_y = height;
   log.info("Done initializing starfield");
 }
 
