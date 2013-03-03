@@ -20,7 +20,7 @@ std::string Utility::int2string(int in){
 }
 
 int Utility::rand_int_range(int low, int high){
-  return ((rand() % high) + 1) + low;
+  return (rand()%(high-low+1))+low;
 }
 
 bool Utility::in_bounds(int top_x, int top_y, int bottom_x, int bottom_y, int x, int y){

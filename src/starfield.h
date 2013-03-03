@@ -22,12 +22,12 @@ namespace Centron {
     
     const static int star_count = 64;
     
-    int star_x[65];
-    int star_y[65];
-    int star_z[65];
+    int star_x[64];
+    int star_y[64];
+    int star_z[64];
 
-    int star_screenx[65];
-    int star_screeny[65];
+    int star_screenx[64];
+    int star_screeny[64];
 
     int screen_x;
     int screen_y;

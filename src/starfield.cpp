@@ -29,6 +29,10 @@ Starfield::Starfield(int width, int height, SDL_Surface *surface){
     star_x[i] = util.rand_int_range(-500, 500);
     star_y[i] = util.rand_int_range(-500, 500);
     star_z[i] = util.rand_int_range(100, 1000);
+    
+    star_screenx[i] = ((star_x[i] / star_z[i]) * 100) + center_x;
+    star_screeny[i] = ((star_y[i] / star_z[i]) * 100) + center_y;
+    
     log.info("Star position: "+util.int2string(star_x[i])+","\
              + util.int2string(star_y[i]) + "," \
              + util.int2string(star_z[i]));
