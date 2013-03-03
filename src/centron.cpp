@@ -72,14 +72,35 @@ void Engine::clean_up(){
 }
 
 bool Engine::loop(){
-  Starfield starfield (SCREEN_WIDTH, SCREEN_HEIGHT, screen);
-  starfield.next_state();
-  
+  //Starfield starfield (SCREEN_WIDTH, SCREEN_HEIGHT, screen);
+  //starfield.next_state();  
+  for(int x = 0; x < 255; x++){
+    for(int y = 0; y < 255; y++){
+      Uint32 color = SDL_MapRGB(screen->format, x, 255, y);
+      gfx.apply_pixel(screen, x, y, color);
+    }
+  }
+  for(int x = 0; x < 255; x++){
+    for(int y = 0; y < 255; y++){
+      Uint32 color = SDL_MapRGB(screen->format, x, y, 255);
+      gfx.apply_pixel(screen, x, y+255, color);
+    }
+  }
+  for(int x = 0; x < 255; x++){
+    for(int y = 0; y < 255; y++){
+      Uint32 color = SDL_MapRGB(screen->format, 255, x, y);
+      gfx.apply_pixel(screen, x+255, y, color);
+    }
+  }
+ 
+  SDL_Flip(screen);
   log.info("In main loop.");
   bool quit = false;
   while(!quit){
     while(SDL_PollEvent(&event)){
       if(event.type == SDL_KEYDOWN){
+        //starfield.next_state();  
+        SDL_Flip(screen);
         switch(event.key.keysym.sym){
         case SDLK_UP: //message_keyboard = message_up;
             log.info("Key: UP");
