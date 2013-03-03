@@ -1,38 +1,39 @@
-#include "logger.h"
 #include <iostream>
+#include <string>
+
+#include "log.h"
 
 using namespace Centron;
 
-Logger::Logger()
-{
+Logger::Logger() {
   tag = "LOG";
   info("Logger initialized.");
 }
-Logger::Logger(std::string newtag){
+Logger::Logger(std::string newtag) {
   tag = newtag;
   info("Logger initialized.");
 }
-Logger::~Logger()
-{
+Logger::~Logger() {
+  //info("Logger departing.");
 }
-void Logger::info(std::string message){
+void Logger::info(std::string message) {
   std::cout << "[" << tag << "] " << message << std::endl;
 }
-void Logger::info(std::string suptag, std::string message){
+void Logger::info(std::string suptag, std::string message) {
   std::cout << "[" << suptag << "] " << message << std::endl;
 }
-void Logger::warn(std::string message){
+void Logger::warn(std::string message) {
   std::cout << "[" << tag << " WARN] " << message << std::endl;
 }
-void Logger::warn(std::string suptag, std::string message){
+void Logger::warn(std::string suptag, std::string message) {
   std::cout << "[" << suptag << " WARN] " << message << std::endl;
 }
-void Logger::err(std::string message){
+void Logger::err(std::string message) {
   std::cout << "[" << tag << " ERROR] " << message << std::endl;
 }
-void Logger::err(std::string suptag, std::string message){
+void Logger::err(std::string suptag, std::string message) {
   std::cout << "[" << suptag << " ERROR] " << message << std::endl;
 }
-void Logger::setTag(std::string newtag){
+void Logger::setTag(std::string newtag) {
   tag = newtag;
 }

@@ -1,8 +1,13 @@
+// System Includes
 #include <string>
-#include "graphics.h"
-#include "logger.h"
+
+// External Includes
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
+
+// Internal Includes
+#include "graphics.h"
+#include "log.h"
 
 using namespace Centron;
 

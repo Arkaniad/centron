@@ -1,4 +1,8 @@
-add_executable(centron centron.cpp)
-add_subdirectory(lib)
-target_link_libraries(centron SDL SDL_image SDL_ttf SDL_mixer centron-log centron-graphics centron-gui centron-resources)
-add_subdirectory(res)
+add_executable(centron main.cpp)
+
+add_library(centron-engine centron.cpp)
+add_library(centron-log log.cpp)
+add_library(centron-graphics graphics.cpp)
+add_library(centron-resources resources.cpp)
+add_library(centron-util util.cpp)
+target_link_libraries(centron SDL SDL_image SDL_ttf SDL_mixer centron-engine centron-util centron-log centron-graphics centron-resources)
