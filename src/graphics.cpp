@@ -43,3 +43,13 @@ void Graphics::apply_image(int x, int y, SDL_Surface* source, SDL_Surface* dest,
   }
 }
 
+void Graphics::apply_pixel(SDL_Surface* source, int x, int y, Uint32 color){
+  Uint32 *pixmem32;
+
+  x = x*4;
+  y = y*4;
+  
+  pixmem32 = (Uint32*) source->pixels + y + x;
+  *pixmem32 = color;
+}
+

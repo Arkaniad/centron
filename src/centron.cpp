@@ -12,6 +12,7 @@
 #include "graphics.h"
 #include "resources.h"
 #include "util.h"
+#include "starfield.h"
 #include "centron.h"
 
 using namespace Centron;
@@ -71,6 +72,9 @@ void Engine::clean_up(){
 }
 
 bool Engine::loop(){
+  Starfield starfield (SCREEN_WIDTH, SCREEN_HEIGHT, screen);
+  starfield.next_state();
+  
   log.info("In main loop.");
   bool quit = false;
   while(!quit){
