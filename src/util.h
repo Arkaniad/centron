@@ -15,6 +15,9 @@ namespace Centron {
     std::string int2string(int in);
     int rand_int_range(int low, int high);
 
+    // String functions
+    const char *concat_chars(char *one[], char *two[]);
+    
     // Geometry functions (amenable to separate later)
     bool in_bounds(int top_x, int top_y, int bottom_x, int bottom_y, int x, int y);
     

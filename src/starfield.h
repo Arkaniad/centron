@@ -44,6 +44,7 @@ namespace Centron {
   public:
     Starfield(int width, int height, SDL_Surface *surface);
     void next_state();
+    int get_new_axial_position(int axis, int z, int center);
   };
 }
 

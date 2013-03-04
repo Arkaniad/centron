@@ -23,6 +23,7 @@ namespace Centron {
     void setLaunchPath(std::string path);
     std::string getResPath();
     std::string getLaunchPath();
+    std::string getFontPath(std::string font);
   };
 }
 

@@ -32,6 +32,15 @@ std::string Resources::getLaunchPath(){
 std::string Resources::getResPath(){
   return resPath;
 }
+std::string Resources::getFontPath(std::string font = ""){
+  if(font == ""){
+    log.info(getResPath().append("font/"));
+    return getResPath().append("font/");
+  } else {
+    log.info(getFontPath().append(font));
+    return getFontPath().append(font);
+  }
+}
 void Resources::buildResPath(){
   resPath = truncateExecFromPath(launchPath).append("res/");
   log.info("Built resPath: "+resPath);

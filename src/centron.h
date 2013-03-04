@@ -15,6 +15,8 @@
 #include "graphics.h"
 #include "resources.h"
 #include "util.h"
+#include "timer.h"
+
 
 namespace Centron {
   /**
@@ -35,15 +37,32 @@ namespace Centron {
     const static int SCREEN_HEIGHT  = 640;
     const static int SCREEN_BPP     = 32;
 
+    const static int FPS_LIMIT      = 60;
+    
     // Internal Variables
     Logger    log;
     Graphics  gfx;
     Resources res;
     Utility   util;
+    Timer     timer;
 
+    // Resource Variables
+    // - Surfaces
+    SDL_Surface *message;
+
+    // - Fonts
+    TTF_Font *font;
+
+    // - Colors
+    SDL_Color fontColor;
+    
     // - Transient Variables
     SDL_Event event;
     SDL_Surface *screen;
+
+    int frame;
+    bool cap;
+
   public:
     Engine(const int argc, const char *argv[]);
     bool init(const int argc, const char *argv[]);

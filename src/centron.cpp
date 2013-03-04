@@ -24,6 +24,16 @@ const std::string Engine::RES_PATH = "/res/";
 
 std::string PATH;
 
+SDL_Surface *screen = NULL;
+
+SDL_Surface *message = NULL;
+
+TTF_Font *font = NULL;
+
+SDL_Color fontColor = {255, 255, 255};
+
+
+
 Engine::Engine(const int argc, const char *argv[]){
   log.info("Bootstrap stage 2");
   main(argc, argv);
@@ -58,48 +68,51 @@ bool Engine::load_files(){
   log.info("Loading content");
 
   log.info("Loading images.");
-
+  
   log.info("Loading fonts.");
-
+  font = TTF_OpenFont(res.getFontPath("ttf-inconsolata.otf").c_str(), 10);
+  if(font == NULL){
+    log.err("Unable to load font \"Inconsolata\"");
+    return false;
+  } else {
+    message = TTF_RenderText_Solid(font, VERSION_STR.c_str(), fontColor);
+    if(message == NULL){
+      log.err("Unable to load version tag");
+      return false;
+    }
+  }
   return true;
 }
 
 void Engine::clean_up(){
   log.info("Cleaning up");
 
+  SDL_FreeSurface(message);
+
+  TTF_CloseFont(font);
+  
   TTF_Quit();
   SDL_Quit();
 }
 
 bool Engine::loop(){
-  //Starfield starfield (SCREEN_WIDTH, SCREEN_HEIGHT, screen);
-  //starfield.next_state();  
-  for(int x = 0; x < 255; x++){
-    for(int y = 0; y < 255; y++){
-      Uint32 color = SDL_MapRGB(screen->format, x, 255, y);
-      gfx.apply_pixel(screen, x, y, color);
-    }
-  }
-  for(int x = 0; x < 255; x++){
-    for(int y = 0; y < 255; y++){
-      Uint32 color = SDL_MapRGB(screen->format, x, y, 255);
-      gfx.apply_pixel(screen, x, y+255, color);
-    }
-  }
-  for(int x = 0; x < 255; x++){
-    for(int y = 0; y < 255; y++){
-      Uint32 color = SDL_MapRGB(screen->format, 255, x, y);
-      gfx.apply_pixel(screen, x+255, y, color);
-    }
-  }
- 
+  timer.start();
+
+  //Starfield
+  Starfield starfield (SCREEN_WIDTH, SCREEN_HEIGHT, screen);
+  starfield.next_state();
+
+  //Timer
+    gfx.apply_image(100, 100, message, screen, NULL);
   SDL_Flip(screen);
   log.info("In main loop.");
   bool quit = false;
   while(!quit){
+    starfield.next_state();
+    gfx.apply_image(0, 0, message, screen, NULL);
+    SDL_Flip(screen);  
     while(SDL_PollEvent(&event)){
       if(event.type == SDL_KEYDOWN){
-        //starfield.next_state();  
         SDL_Flip(screen);
         switch(event.key.keysym.sym){
         case SDLK_UP: //message_keyboard = message_up;

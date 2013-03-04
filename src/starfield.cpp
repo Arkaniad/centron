@@ -14,6 +14,7 @@
 using namespace Centron;
 
 Starfield::Starfield(int w, int h, SDL_Surface *surface){
+  srand(time(0));
   log.setTag("STRFLD");
   log.info("Initializing starfield");
 
@@ -33,37 +34,28 @@ Starfield::Starfield(int w, int h, SDL_Surface *surface){
   
   log.info("Loading stars");
   for(int i = 0; i < star_count; i++){
-    log.info("Loading star "+util.int2string(i));
     star_x[i] = util.rand_int_range(-500, 500);
     star_y[i] = util.rand_int_range(-500, 500);
-    star_z[i] = util.rand_int_range(100, 1000);
+    star_z[i] = util.rand_int_range(0, 927);
     
-    star_screenx[i] = ((star_x[i] / star_z[i]) * 100) + center_x;
-    star_screeny[i] = ((star_y[i] / star_z[i]) * 100) + center_y;
+    star_screenx[i] = get_new_axial_position(star_x[i], star_z[i], center_x);
+    star_screeny[i] = get_new_axial_position(star_y[i], star_z[i], center_y);
     
-    log.info("Star position: "+util.int2string(star_x[i])+","\
-             + util.int2string(star_y[i]) + "," \
-             + util.int2string(star_z[i]));
   }
 
   log.info("Done initializing starfield");
 }
 
 void Starfield::next_state(){
-  log.info("Advancing starfield state...");
   for(int i = 0; i < star_count; i++){
-    log.info("Applying pixel for star "+util.int2string(i));
-    log.info("X: "+util.int2string(star_screenx[i]));
-    log.info("Y: "+util.int2string(star_screeny[i]));
     gfx.apply_pixel(screen, star_screenx[i], star_screeny[i], blank);
-    log.info("Applied pixel.");
     
-    star_z[i] = star_z[i] - 5;
+    star_z[i] = star_z[i] + 5;
 
-    star_screenx[i] = ((star_x[i] / star_z[i]) * 100) + center_x;
-    star_screeny[i] = ((star_y[i] / star_z[i]) * 100) + center_y;
-    
-    if((!util.in_bounds(0, 0, screen_x, screen_y, star_screenx[i], star_screeny[i])) | (star_z[i] < 1)){
+    star_screenx[i] = get_new_axial_position(star_x[i], star_z[i], center_x);
+    star_screeny[i] = get_new_axial_position(star_y[i], star_z[i], center_y);
+
+    if((!util.in_bounds(0, 0, screen_x, screen_y, star_screenx[i], star_screeny[i])) | (star_z[i] > 927)){
       star_x[i] = util.rand_int_range(-500, 500);
       star_y[i] = util.rand_int_range(-500, 500);
       star_z[i] = util.rand_int_range(100, 1000);
@@ -71,4 +63,8 @@ void Starfield::next_state(){
 
     gfx.apply_pixel(screen, star_screenx[i], star_screeny[i], color);
   }
+}
+
+int Starfield::get_new_axial_position(int axis, int z, int center){
+  return (axis * (.000000001 * (z*z*z)) + center);
 }

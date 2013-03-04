@@ -72,7 +72,7 @@ void Graphics::apply_pixel(SDL_Surface* surface, int x, int y, Uint32 pixel){
       break;
     }     
   } else {
-    log.warn("Pixel out of range.");
+    // woops
   }
 }
 
