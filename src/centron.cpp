@@ -70,7 +70,8 @@ bool Engine::load_files(){
   log.info("Loading images.");
   
   log.info("Loading fonts.");
-  font = TTF_OpenFont(res.getFontPath("ttf-inconsolata.otf").c_str(), 10);
+  //font = TTF_OpenFont(res.getFontPath("ttf-inconsolata.otf").c_str(), 10);
+  font = TTF_OpenFont("/usr/share/fonts/TTF/arial.ttf", 10);
   if(font == NULL){
     log.err("Unable to load font \"Inconsolata\"");
     return false;
@@ -103,13 +104,14 @@ bool Engine::loop(){
   starfield.next_state();
 
   //Timer
-    gfx.apply_image(100, 100, message, screen, NULL);
+  gfx.apply_image(100, 100, message, screen, NULL);
   SDL_Flip(screen);
+  log.info(SDL_GetError());
   log.info("In main loop.");
   bool quit = false;
   while(!quit){
     starfield.next_state();
-    gfx.apply_image(0, 0, message, screen, NULL);
+    gfx.apply_image(100, 100, message, screen, NULL);
     SDL_Flip(screen);  
     while(SDL_PollEvent(&event)){
       if(event.type == SDL_KEYDOWN){
