@@ -103,9 +103,6 @@ bool Engine::loop(){
   Starfield starfield (SCREEN_WIDTH, SCREEN_HEIGHT, screen);
   starfield.next_state();
   
-  gfx.apply_image(100, 100, message, screen);
-  SDL_Flip(screen);
-  log.info(SDL_GetError());
   log.info("In main loop.");
   
   bool quit = false;
