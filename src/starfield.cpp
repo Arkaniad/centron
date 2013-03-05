@@ -66,5 +66,5 @@ void Starfield::next_state(){
 }
 
 int Starfield::get_new_axial_position(int axis, int z, int center){
-  return (axis * (.000000001 * (z*z*z)) + center);
+  return (axis * (.000000001 * ((z*z*z)-3)) + center);
 }

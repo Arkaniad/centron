@@ -32,7 +32,9 @@ TTF_Font *font = NULL;
 
 SDL_Color fontColor = {255, 255, 255};
 
+int frame = 0;
 
+bool cap = true;
 
 Engine::Engine(const int argc, const char *argv[]){
   log.info("Bootstrap stage 2");
@@ -97,21 +99,20 @@ void Engine::clean_up(){
 }
 
 bool Engine::loop(){
-  timer.start();
-
   //Starfield
   Starfield starfield (SCREEN_WIDTH, SCREEN_HEIGHT, screen);
   starfield.next_state();
-
-  //Timer
-  gfx.apply_image(100, 100, message, screen, NULL);
+  
+  gfx.apply_image(100, 100, message, screen);
   SDL_Flip(screen);
   log.info(SDL_GetError());
   log.info("In main loop.");
+  
   bool quit = false;
   while(!quit){
+    fps.start();
     starfield.next_state();
-    gfx.apply_image(100, 100, message, screen, NULL);
+    gfx.apply_image(100, 100, message, screen);
     SDL_Flip(screen);  
     while(SDL_PollEvent(&event)){
       if(event.type == SDL_KEYDOWN){
@@ -137,6 +138,9 @@ bool Engine::loop(){
         log.info("Received quit event.");
         quit = true;
       }
+    }
+    if((cap) && (fps.get_ticks() < 1000 / FPS_LIMIT)){
+      SDL_Delay((1000/FPS_LIMIT)-fps.get_ticks());
     }
   }
   return true;

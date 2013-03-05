@@ -16,14 +16,12 @@ Timer::Timer(){
 }
 
 void Timer::start(){
-  log.info("Starting timer.");
   started = true;
   paused = false;
   startTicks = SDL_GetTicks();
 }
 
 void Timer::stop(){
-  log.info("Stopping timer.");
   paused = false;
   started = false;
   pausedTicks = 0;

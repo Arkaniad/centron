@@ -44,7 +44,7 @@ namespace Centron {
     Graphics  gfx;
     Resources res;
     Utility   util;
-    Timer     timer;
+    Timer     fps;
 
     // Resource Variables
     // - Surfaces
@@ -60,7 +60,6 @@ namespace Centron {
     SDL_Event event;
     SDL_Surface *screen;
 
-    int frame;
     bool cap;
 
   public:
