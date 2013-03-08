@@ -36,7 +36,7 @@ Starfield::Starfield(int w, int h, SDL_Surface *surface){
   for(int i = 0; i < star_count; i++){
     star_x[i] = util.rand_int_range(-500, 500);
     star_y[i] = util.rand_int_range(-500, 500);
-    star_z[i] = util.rand_int_range(0, 927);
+    star_z[i] = util.rand_int_range(100, 1000);
     
     star_screenx[i] = get_new_axial_position(star_x[i], star_z[i], center_x);
     star_screeny[i] = get_new_axial_position(star_y[i], star_z[i], center_y);
@@ -67,4 +67,6 @@ void Starfield::next_state(){
 
 int Starfield::get_new_axial_position(int axis, int z, int center){
   return (axis * (.000000001 * ((z*z*z)-3)) + center);
+  //return axis / z * 100 + center;
+  //return (int) axis*(0.5)*(z*z*z);
 }

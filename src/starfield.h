@@ -20,14 +20,14 @@ namespace Centron {
     
     SDL_Surface *screen;
     
-    const static int star_count = 64;
+    const static int star_count = 1000;
     
-    int star_x[64];
-    int star_y[64];
-    int star_z[64];
+    int star_x[1000];
+    int star_y[1000];
+    int star_z[1000];
 
-    int star_screenx[64];
-    int star_screeny[64];
+    int star_screenx[1000];
+    int star_screeny[1000];
 
     int screen_x;
     int screen_y;
