@@ -22,9 +22,9 @@ namespace Centron {
     
     const static int star_count = 1000;
     
-    int star_x[1000];
-    int star_y[1000];
-    int star_z[1000];
+    float star_x[1000];
+    float star_y[1000];
+    float star_z[1000];
 
     int star_screenx[1000];
     int star_screeny[1000];
@@ -44,7 +44,7 @@ namespace Centron {
   public:
     Starfield(int width, int height, SDL_Surface *surface);
     void next_state();
-    int get_new_axial_position(int axis, int z, int center);
+    int get_new_axial_position(float axis, float z, int center);
   };
 }
 

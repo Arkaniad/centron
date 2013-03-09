@@ -34,9 +34,9 @@ Starfield::Starfield(int w, int h, SDL_Surface *surface){
   
   log.info("Loading stars");
   for(int i = 0; i < star_count; i++){
-    star_x[i] = util.rand_int_range(-500, 500);
-    star_y[i] = util.rand_int_range(-500, 500);
-    star_z[i] = util.rand_int_range(100, 1000);
+    star_x[i] = util.rand_int_range(-25.0, 25.0);
+    star_y[i] = util.rand_int_range(-25.0, 25.0);
+    star_z[i] = util.rand_int_range(1.0, 32.0);
     
     star_screenx[i] = get_new_axial_position(star_x[i], star_z[i], center_x);
     star_screeny[i] = get_new_axial_position(star_y[i], star_z[i], center_y);
@@ -50,23 +50,24 @@ void Starfield::next_state(){
   for(int i = 0; i < star_count; i++){
     gfx.apply_pixel(screen, star_screenx[i], star_screeny[i], blank);
     
-    star_z[i] = star_z[i] + 5;
+    star_z[i] = star_z[i] - 0.2;
 
     star_screenx[i] = get_new_axial_position(star_x[i], star_z[i], center_x);
     star_screeny[i] = get_new_axial_position(star_y[i], star_z[i], center_y);
 
-    if((!util.in_bounds(0, 0, screen_x, screen_y, star_screenx[i], star_screeny[i])) | (star_z[i] > 927)){
-      star_x[i] = util.rand_int_range(-500, 500);
-      star_y[i] = util.rand_int_range(-500, 500);
-      star_z[i] = util.rand_int_range(100, 1000);
+    if((!util.in_bounds(0, 0, screen_x, screen_y, star_screenx[i], star_screeny[i])) | (star_z[i] <= 0)){
+      star_x[i] = util.rand_int_range(-25, 25);
+      star_y[i] = util.rand_int_range(-25, 25);
+      star_z[i] = util.rand_int_range(1, 32);
     }
 
     gfx.apply_pixel(screen, star_screenx[i], star_screeny[i], color);
   }
 }
 
-int Starfield::get_new_axial_position(int axis, int z, int center){
-  return (axis * (.000000001 * ((z*z*z)-3)) + center);
+int Starfield::get_new_axial_position(float axis, float z, int center){
+  float k = 128.0 / z;
+  return (axis * k + (float) center) + 0.5;
   //return axis / z * 100 + center;
   //return (int) axis*(0.5)*(z*z*z);
 }
