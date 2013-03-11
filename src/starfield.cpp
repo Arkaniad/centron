@@ -73,6 +73,6 @@ int Starfield::get_new_axial_position(float axis, float z, int center){
 }
 
 Uint32 Starfield::get_new_color(float z){
-  int fade = (1 - z / 32.0) * 255;
+  int fade = (1 - (z / 32.0)) * 255;
   return SDL_MapRGB(screen->format, fade, fade, fade);
 }

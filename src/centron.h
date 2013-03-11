@@ -34,7 +34,7 @@ namespace Centron {
     
     // Settings (later changeable at runtime)
     const static int SCREEN_WIDTH   = 800;
-    const static int SCREEN_HEIGHT  = 640;
+    const static int SCREEN_HEIGHT  = 600;
     const static int SCREEN_BPP     = 32;
 
     const static int FPS_LIMIT      = 60;
