@@ -15,9 +15,9 @@ Centron is a simple little space shooter game that I designed to teach myself mo
 Tasks
 ----------
 
-- [x] General engine framework
-- [ ] General graphics framework
-- [ ] General resource framework
-- [ ] General physics framework
-- [ ] Game logic
-- [ ] Spit shine
+- [70%] General engine framework
+- [30%] General graphics framework
+- [10%] General resource framework
+- [0%] General physics framework
+- [5%] Game logic
+- [0%] Spit shine
