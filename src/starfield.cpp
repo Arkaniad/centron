@@ -50,7 +50,7 @@ void Starfield::next_state(){
   for(int i = 0; i < star_count; i++){
     gfx.apply_pixel(screen, star_screenx[i], star_screeny[i], blank);
     
-    star_z[i] = star_z[i] - 0.2;
+    star_z[i] = star_z[i] - 0.02;
 
     star_screenx[i] = get_new_axial_position(star_x[i], star_z[i], center_x);
     star_screeny[i] = get_new_axial_position(star_y[i], star_z[i], center_y);
@@ -61,7 +61,7 @@ void Starfield::next_state(){
       star_z[i] = util.rand_int_range(1, 32);
     }
 
-    gfx.apply_pixel(screen, star_screenx[i], star_screeny[i], color);
+    gfx.apply_pixel(screen, star_screenx[i], star_screeny[i], get_new_color(star_z[i]));
   }
 }
 
@@ -70,4 +70,9 @@ int Starfield::get_new_axial_position(float axis, float z, int center){
   return (axis * k + (float) center) + 0.5;
   //return axis / z * 100 + center;
   //return (int) axis*(0.5)*(z*z*z);
+}
+
+Uint32 Starfield::get_new_color(float z){
+  int fade = (1 - z / 32.0) * 255;
+  return SDL_MapRGB(screen->format, fade, fade, fade);
 }

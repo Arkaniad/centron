@@ -45,6 +45,7 @@ namespace Centron {
     Starfield(int width, int height, SDL_Surface *surface);
     void next_state();
     int get_new_axial_position(float axis, float z, int center);
+    Uint32 get_new_color(float z);
   };
 }
 
