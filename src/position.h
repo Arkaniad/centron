@@ -3,9 +3,11 @@
 
 namespace Centron {
   struct Pos2D {
-    long x, y;
-  }
+    int x, y;
+  };
   struct Pos3D {
-    long x, y, z;
-  }
+    int x, y, z;
+  };
 }
+
+#endif
