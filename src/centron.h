@@ -45,25 +45,29 @@ namespace Centron {
     Resources res;
     Utility   util;
     Timer     fps;
-
+    Timer     update;
+    
     // Resource Variables
     // - Surfaces
     SDL_Surface *message;
 
     // - Fonts
     TTF_Font *font;
-
+    TTF_Font *console_font;
+    
     // - Colors
-    SDL_Color fontColor;
+    SDL_Color fontColor = {255, 255, 255};
     
     // - Transient Variables
     SDL_Event event;
     SDL_Surface *screen;
 
+    int frame;
     bool cap;
 
   public:
     Engine(const int argc, const char *argv[]);
+    float get_fps();
     bool init(const int argc, const char *argv[]);
     bool load_files();
     void clean_up();

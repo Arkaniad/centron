@@ -30,8 +30,6 @@ SDL_Surface *message = NULL;
 
 TTF_Font *font = NULL;
 
-SDL_Color fontColor = {255, 255, 255};
-
 int frame = 0;
 
 bool cap = true;
@@ -72,10 +70,10 @@ bool Engine::load_files(){
   log.info("Loading images.");
   
   log.info("Loading fonts.");
-  //font = TTF_OpenFont(res.getFontPath("ttf-inconsolata.otf").c_str(), 10);
-  font = TTF_OpenFont("/usr/share/fonts/TTF/arial.ttf", 10);
+  console_font = TTF_OpenFont(res.getFontPath("ttf-inconsolata.otf").c_str(), 16);
+  font = TTF_OpenFont(res.getFontPath("ttf-droidsans.ttf").c_str(), 12);
   if(font == NULL){
-    log.err("Unable to load font \"Inconsolata\"");
+    log.err("Unable to load fonts");
     return false;
   } else {
     message = TTF_RenderText_Solid(font, VERSION_STR.c_str(), fontColor);
@@ -99,21 +97,38 @@ void Engine::clean_up(){
 }
 
 bool Engine::loop(){
-  //Starfield
+  frame = 0;
+  // Starfield
   Starfield starfield (SCREEN_WIDTH, SCREEN_HEIGHT, screen);
   starfield.next_state();
+
+  //Framerate Utilities
+  update.start();
   
   log.info("In main loop.");
   
   bool quit = false;
   while(!quit){
+    // Framerate Utilities
     fps.start();
+    frame++;
+      
+    // Starfield
     starfield.next_state();
-    gfx.apply_image(100, 100, message, screen);
-    SDL_Flip(screen);  
+
+    // FPS Display
+    std::stringstream caption;
+    caption << VERSION_STR.c_str() << " | FPS: " << get_fps();
+    get_fps();
+    message = TTF_RenderText_Solid(font, caption.str().c_str(), fontColor);
+    gfx.apply_image(0, SCREEN_HEIGHT - message->h, message, screen);    
+
+    // Flip
+    SDL_Flip(screen);
+
+    // Event Handling
     while(SDL_PollEvent(&event)){
       if(event.type == SDL_KEYDOWN){
-        SDL_Flip(screen);
         switch(event.key.keysym.sym){
         case SDLK_UP: //message_keyboard = message_up;
             log.info("Key: UP");
@@ -169,4 +184,13 @@ int Engine::main(const int argc, const char *argv[]){
 
   clean_up();
   return 0;
+}
+
+float Engine::get_fps() {
+  if(update.get_ticks() > 1000) {
+    float frames = frame / (fps.get_ticks() / 1000.f);
+    std::cout << frames << std::endl;
+    update.start();
+    return frames;
+  }
 }
