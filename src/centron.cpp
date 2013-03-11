@@ -18,7 +18,7 @@
 using namespace Centron;
 
 // Variable Declarations
-const std::string Engine::VERSION_STR = "Centron 0.0.1a";
+const std::string Engine::VERSION_STR = "Centron 0.0.3a";
 const std::string Engine::LOG_TAG = "ENG";
 const std::string Engine::RES_PATH = "/res/";
 
