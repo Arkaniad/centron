@@ -30,10 +30,6 @@ SDL_Surface *message = NULL;
 
 TTF_Font *font = NULL;
 
-int frame = 0;
-
-bool cap = true;
-
 Engine::Engine(const int argc, const char *argv[]){
   log.info("Bootstrap stage 2");
   main(argc, argv);
@@ -97,34 +93,25 @@ void Engine::clean_up(){
 }
 
 bool Engine::loop(){
-  frame = 0;
   // Starfield
   Starfield starfield (SCREEN_WIDTH, SCREEN_HEIGHT, screen);
   starfield.next_state();
 
   //Framerate Utilities
+  int frame = 0;
+  int framerate = 0;
+  bool cap_frame = true;
   update.start();
   
   log.info("In main loop.");
   
   bool quit = false;
   while(!quit){
-    // Framerate Utilities
     fps.start();
-    frame++;
-      
     // Starfield
     starfield.next_state();
 
     // FPS Display
-    std::stringstream caption;
-    caption << VERSION_STR.c_str() << " | FPS: " << get_fps();
-    get_fps();
-    message = TTF_RenderText_Solid(font, caption.str().c_str(), fontColor);
-    gfx.apply_image(0, SCREEN_HEIGHT - message->h, message, screen);    
-
-    // Flip
-    SDL_Flip(screen);
 
     // Event Handling
     while(SDL_PollEvent(&event)){
@@ -151,8 +138,23 @@ bool Engine::loop(){
         quit = true;
       }
     }
-    if((cap) && (fps.get_ticks() < 1000 / FPS_LIMIT)){
-      SDL_Delay((1000/FPS_LIMIT)-fps.get_ticks());
+    
+    if(SDL_Flip(screen) == -1){
+      return 1;
+    }
+    
+    frame++;
+
+    if((cap_frame) && (fps.get_ticks() < 1000 / FPS_LIMIT)){
+      int ticks = fps.get_ticks();
+      SDL_Delay((1000/FPS_LIMIT)-ticks);
+    }
+    
+    if(update.get_ticks() > 1000) {
+      framerate = frame;
+      std::cout << "fps: " << framerate << std::endl;
+      frame = 0;
+      update.start();
     }
   }
   return true;
@@ -184,13 +186,4 @@ int Engine::main(const int argc, const char *argv[]){
 
   clean_up();
   return 0;
-}
-
-float Engine::get_fps() {
-  if(update.get_ticks() > 1000) {
-    float frames = frame / (fps.get_ticks() / 1000.f);
-    std::cout << frames << std::endl;
-    update.start();
-    return frames;
-  }
 }

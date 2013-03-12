@@ -15,8 +15,8 @@ namespace Centron {
     bool started;
     bool paused;
 
-    Uint32 startTicks;
-    Uint32 pausedTicks;
+    int startTicks;
+    int pausedTicks;
     
     Logger log;
   public:

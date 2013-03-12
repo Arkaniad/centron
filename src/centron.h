@@ -67,7 +67,6 @@ namespace Centron {
 
   public:
     Engine(const int argc, const char *argv[]);
-    float get_fps();
     bool init(const int argc, const char *argv[]);
     bool load_files();
     void clean_up();
