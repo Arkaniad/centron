@@ -221,5 +221,5 @@ SDL_Surface *Engine::get_star_surface() {
   bmask = 0x00ff0000;
   amask = 0xff000000;
 #endif
-  stars = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, rmask, gmask, bmask, amask);
+  return SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, rmask, gmask, bmask, amask);
 }

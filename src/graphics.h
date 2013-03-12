@@ -22,6 +22,7 @@ namespace Centron {
     SDL_Surface *load_image(std::string filename);
     void apply_image(int x, int y, SDL_Surface* source, SDL_Surface* dest, SDL_Rect* clip = NULL);
     void apply_pixel(SDL_Surface *screen, int x, int y, Uint32 color);
+    void apply_line(SDL_Surface *surface, int x0, int y0, int x1, int y1, Uint32 color);
   };
 }
 #endif

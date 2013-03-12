@@ -1,5 +1,6 @@
 // System Includes
 #include <string>
+#include <cmath>
 
 // External Includes
 #include "SDL/SDL.h"
@@ -76,3 +77,44 @@ void Graphics::apply_pixel(SDL_Surface* surface, int x, int y, Uint32 pixel){
   }
 }
 
+void Graphics::apply_line(SDL_Surface *surface, int x0, int y0, int x1, int y1, Uint32 color) {
+  int dx = abs(x1-x0);
+  int dy = abs(y1-y0);
+  
+  int sx;
+  int sy;
+  
+  if(x0 < x1) {
+    sx = 1;
+  } else {
+    sx = -1;
+  }
+  
+  if(y0 < y1) {
+    sy = 1;
+  } else {
+    sy = -1;
+  }
+  
+  int err = dx-dy;
+  
+  bool drawing = false;
+  while(drawing) {
+    apply_pixel(surface, x0, y0, color);
+    if(x0 == x1 and y0 == y1) {
+      drawing = false;
+      return;
+    }
+    
+    int e2 = 2*err;
+    if(e2 > -dy) {
+      err = err -dy;
+      x0 = x0 + sx;
+    }
+    
+    if(e2 > dx) { 
+      err = err + dx;
+      y0 = y0 + sy;
+    }
+  }
+}
