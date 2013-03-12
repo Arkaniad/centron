@@ -47,11 +47,7 @@ Starfield::Starfield(int w, int h, SDL_Surface *surface){
 }
 
 void Starfield::next_state(){
-  for(int x = 0; x < screen_x; x++){
-    for(int y = 0; y < screen_y; y++){
-      gfx.apply_pixel(screen, x, y, blank);
-    }
-  }
+  SDL_FillRect(screen, NULL, blank);
   for(int i = 0; i < star_count; i++){
     //gfx.apply_pixel(screen, star_screenx[i], star_screeny[i], blank);
     

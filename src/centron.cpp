@@ -19,7 +19,7 @@
 using namespace Centron;
 
 // Variable Declarations
-const std::string Engine::VERSION_STR = "Centron 0.0.3a";
+const std::string Engine::VERSION_STR = "Centron 0.0.9a";
 const std::string Engine::LOG_TAG = "ENG";
 const std::string Engine::RES_PATH = "/res/";
 
@@ -114,23 +114,19 @@ bool Engine::loop(){
   bool quit = false;
   while(!quit){
     fps.start();
+
+    //Clear Rect
+    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
     
     // Starfield
     starfield.next_state();
     gfx.apply_image(0, 0, stars, screen);
     
-    //Clear Rect
-    SDL_FillRect(screen, &clear_rect, SDL_MapRGB(screen->format, 0, 0, 0));
-    
+    // FPS Display
     std::stringstream buf;
     buf << VERSION_STR.c_str() << " | " << status << " | FPS: " << framerate;
     message = TTF_RenderText_Solid(font, buf.str().c_str(), fontColor);
     gfx.apply_image(0, SCREEN_HEIGHT-message->h, message, screen);
-    
-
-    
-
-    // FPS Display
 
     // Event Handling
     while(SDL_PollEvent(&event)){
