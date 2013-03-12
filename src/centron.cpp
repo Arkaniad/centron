@@ -1,5 +1,6 @@
 // System Includes
 #include <string>
+#include <sstream>
 
 // External Includes
 #include "SDL/SDL.h"
@@ -25,7 +26,7 @@ const std::string Engine::RES_PATH = "/res/";
 std::string PATH;
 
 SDL_Surface *screen = NULL;
-
+SDL_Surface *stars = NULL;
 SDL_Surface *message = NULL;
 
 TTF_Font *font = NULL;
@@ -40,6 +41,7 @@ bool Engine::init(const int argc, const char *argv[]) {
   log.info(argv[0]);
   res.setLaunchPath(argv[0]);
 
+  status = "Running...";
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1) {
     log.info("Failed to initialize SDL.");
     return false;
@@ -50,6 +52,8 @@ bool Engine::init(const int argc, const char *argv[]) {
     log.err(SDL_GetError());
     return false;
   }
+
+  stars = get_star_surface();
 
   if(TTF_Init() == -1) {
     log.err("Could not initialize font.");
@@ -93,8 +97,11 @@ void Engine::clean_up(){
 }
 
 bool Engine::loop(){
+  // Clear rect
+  SDL_Rect clear_rect {SCREEN_WIDTH, SCREEN_HEIGHT};
+  
   // Starfield
-  Starfield starfield (SCREEN_WIDTH, SCREEN_HEIGHT, screen);
+  Starfield starfield (SCREEN_WIDTH, SCREEN_HEIGHT, stars);
   starfield.next_state();
 
   //Framerate Utilities
@@ -104,12 +111,24 @@ bool Engine::loop(){
   update.start();
   
   log.info("In main loop.");
-  
   bool quit = false;
   while(!quit){
     fps.start();
+    
     // Starfield
     starfield.next_state();
+    gfx.apply_image(0, 0, stars, screen);
+    
+    //Clear Rect
+    SDL_FillRect(screen, &clear_rect, SDL_MapRGB(screen->format, 0, 0, 0));
+    
+    std::stringstream buf;
+    buf << VERSION_STR.c_str() << " | " << status << " | FPS: " << framerate;
+    message = TTF_RenderText_Solid(font, buf.str().c_str(), fontColor);
+    gfx.apply_image(0, SCREEN_HEIGHT-message->h, message, screen);
+    
+
+    
 
     // FPS Display
 
@@ -138,12 +157,6 @@ bool Engine::loop(){
         quit = true;
       }
     }
-    
-    if(SDL_Flip(screen) == -1){
-      return 1;
-    }
-    
-    frame++;
 
     if((cap_frame) && (fps.get_ticks() < 1000 / FPS_LIMIT)){
       int ticks = fps.get_ticks();
@@ -152,10 +165,17 @@ bool Engine::loop(){
     
     if(update.get_ticks() > 1000) {
       framerate = frame;
-      std::cout << "fps: " << framerate << std::endl;
       frame = 0;
+      
       update.start();
     }
+    
+    if(SDL_Flip(screen) == -1){
+      return 1;
+    }
+    
+    frame++;
+    
   }
   return true;
 }
@@ -186,4 +206,20 @@ int Engine::main(const int argc, const char *argv[]){
 
   clean_up();
   return 0;
+}
+
+SDL_Surface *Engine::get_star_surface() {
+  Uint32 rmask, gmask, bmask, amask;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+  rmask = 0xff000000;
+  gmask = 0x00ff0000;
+  bmask = 0x0000ff00;
+  amask = 0x000000ff;
+#else
+  rmask = 0x000000ff;
+  gmask = 0x0000ff00;
+  bmask = 0x00ff0000;
+  amask = 0xff000000;
+#endif
+  stars = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, rmask, gmask, bmask, amask);
 }

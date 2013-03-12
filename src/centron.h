@@ -50,6 +50,7 @@ namespace Centron {
     // Resource Variables
     // - Surfaces
     SDL_Surface *message;
+    std::string status;
 
     // - Fonts
     TTF_Font *font;
@@ -64,7 +65,8 @@ namespace Centron {
 
     int frame;
     bool cap;
-
+    
+    SDL_Surface *get_star_surface();
   public:
     Engine(const int argc, const char *argv[]);
     bool init(const int argc, const char *argv[]);
@@ -72,6 +74,7 @@ namespace Centron {
     void clean_up();
     bool loop();
     int main(const int argc, const char *argv[]);
+    
   };
 }
 #endif
