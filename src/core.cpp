@@ -14,7 +14,7 @@
 #include "resources.h"
 #include "util.h"
 #include "starfield.h"
-#include "centron.h"
+#include "core.h"
 
 using namespace Centron;
 

@@ -3,9 +3,9 @@
 Requirements
 ----------
 
-* CMake
-* SDL 1.2
-* Any compatible build environment
+* SDL 
+* SDL Image
+* SDL TTF
 
 Info
 ----------

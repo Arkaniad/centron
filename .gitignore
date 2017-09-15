@@ -1,11 +1,4 @@
-centron.kdev4
-.kdev4/*
-*.*~
-CMakeCache.txt
-CMakeFiles
-Makefile
-cmake_install.cmake
-install_manifest.txt
 *.a
 #*#
 centron
+*.gch
